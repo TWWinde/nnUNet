@@ -31,4 +31,6 @@ export nnUNet_results="/no_backups/s1449/nnUNetFrame/DATASET/nnUNet_results"
 
 nnUNetv2_plan_and_preprocess -d 521 --verify_dataset_integrity
 
+nnUNetv2_train 521 2d 0
+
 
