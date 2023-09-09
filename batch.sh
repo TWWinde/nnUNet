@@ -7,12 +7,12 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --time=6-23:00:00
 #SBATCH --mem=64G
-#SBATCH --gpus=1
+# SBATCH --gpus=1
 #SBATCH --qos=batch
 #SBATCH --nodes=1
 #SBATCH --gpus=rtx_a5000:1
-#SBATCH --gpus=geforce_rtx_2080ti:1
-#SBATCH --gpus=geforce_gtx_titan_x:1
+# SBATCH --gpus=geforce_rtx_2080ti:1
+# SBATCH --gpus=geforce_gtx_titan_x:1
 
 
 
@@ -22,7 +22,7 @@
 #echo $PATH
 pyenv activate venv
 module load cuda/11.3
-
+CUDA_VISIBLE_DEVICES=0
 # Run your python code
 # For single GPU use this
 export nnUNet_raw="/no_backups/s1449/nnUNetFrame/DATASET/nnUNet_raw"
