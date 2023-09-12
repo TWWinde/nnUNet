@@ -136,6 +136,7 @@ def list_images(path):
 
     return ct_path, label_path
 
+
 if __name__ == "__main__":
     os.makedirs('/misc/data/private/autoPET/data_nnunet/train/images', exist_ok=True)
     os.makedirs('/misc/data/private/autoPET/data_nnunet/train/labels', exist_ok=True)
@@ -146,7 +147,7 @@ if __name__ == "__main__":
     path_imagesTr = "/misc/data/private/autoPET/imagesTr"
     ct_paths, label_paths = list_images(path_imagesTr)
     get_2d_images(ct_paths, label_paths)
-
+    print('data prepare finished')
     # extracted archive from https://www.kaggle.com/datasets/insaff/massachusetts-roads-dataset?resource=download
     source = '/misc/data/private/autoPET/data_nnunet'
 
