@@ -29,6 +29,8 @@ export nnUNet_raw="/no_backups/s1449/nnUNetFrame/DATASET/nnUNet_raw"
 export nnUNet_preprocessed="/no_backups/s1449/nnUNetFrame/DATASET/nnUNet_preprocessed"
 export nnUNet_results="/no_backups/s1449/nnUNetFrame/DATASET/nnUNet_results"
 
+python nnUNet/nnunetv2/dataset_conversion/Dataset120_RoadSegmentation.py
+
 nnUNetv2_plan_and_preprocess -d 521 --verify_dataset_integrity
 
 nnUNetv2_train 521 2d 0
