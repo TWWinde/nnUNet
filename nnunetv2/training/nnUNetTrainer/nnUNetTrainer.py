@@ -20,7 +20,7 @@ from batchgenerators.transforms.resample_transforms import SimulateLowResolution
 from batchgenerators.transforms.spatial_transforms import SpatialTransform, MirrorTransform
 from batchgenerators.transforms.utility_transforms import RemoveLabelTransform, RenameTransform, NumpyToTensor
 from batchgenerators.utilities.file_and_folder_operations import join, load_json, isfile, save_json, maybe_mkdir_p
-from torch._dynamo import OptimizedModule
+# from torch._dynamo import OptimizedModule
 
 from nnunetv2.configuration import ANISO_THRESHOLD, default_num_processes
 from nnunetv2.evaluation.evaluate_predictions import compute_metrics_on_folder
@@ -1043,8 +1043,8 @@ class nnUNetTrainer(object):
                     mod = self.network.module
                 else:
                     mod = self.network
-                if isinstance(mod, OptimizedModule):
-                    mod = mod._orig_mod
+                #if isinstance(mod, OptimizedModule):
+                    #mod = mod._orig_mod
 
                 checkpoint = {
                     'network_weights': mod.state_dict(),
@@ -1085,15 +1085,15 @@ class nnUNetTrainer(object):
 
         # messing with state dict naming schemes. Facepalm.
         if self.is_ddp:
-            if isinstance(self.network.module, OptimizedModule):
-                self.network.module._orig_mod.load_state_dict(new_state_dict)
-            else:
-                self.network.module.load_state_dict(new_state_dict)
+            #if isinstance(self.network.module, OptimizedModule):
+                #self.network.module._orig_mod.load_state_dict(new_state_dict)
+            #else:
+            self.network.module.load_state_dict(new_state_dict)
         else:
-            if isinstance(self.network, OptimizedModule):
-                self.network._orig_mod.load_state_dict(new_state_dict)
-            else:
-                self.network.load_state_dict(new_state_dict)
+            #if isinstance(self.network, OptimizedModule):
+                #self.network._orig_mod.load_state_dict(new_state_dict)
+            #else:
+            self.network.load_state_dict(new_state_dict)
         self.optimizer.load_state_dict(checkpoint['optimizer_state'])
         if self.grad_scaler is not None:
             if checkpoint['grad_scaler_state'] is not None:
