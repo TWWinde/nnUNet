@@ -13,7 +13,7 @@ from batchgenerators.dataloading.multi_threaded_augmenter import MultiThreadedAu
 from batchgenerators.utilities.file_and_folder_operations import load_json, join, isfile, maybe_mkdir_p, isdir, subdirs, \
     save_json
 from torch import nn
-from torch._dynamo import OptimizedModule
+# from torch._dynamo import OptimizedModule
 from torch.nn.parallel import DistributedDataParallel
 from tqdm import tqdm
 
@@ -108,8 +108,8 @@ class nnUNetPredictor(object):
         self.trainer_name = trainer_name
         self.allowed_mirroring_axes = inference_allowed_mirroring_axes
         self.label_manager = plans_manager.get_label_manager(dataset_json)
-        if ('nnUNet_compile' in os.environ.keys()) and (os.environ['nnUNet_compile'].lower() in ('true', '1', 't')) \
-                and not isinstance(self.network, OptimizedModule):
+        if ('nnUNet_compile' in os.environ.keys()) and (os.environ['nnUNet_compile'].lower() in ('true', '1', 't')) :
+                #\and not isinstance(self.network, OptimizedModule)
             print('compiling network')
             self.network = torch.compile(self.network)
 
@@ -130,9 +130,9 @@ class nnUNetPredictor(object):
         self.label_manager = plans_manager.get_label_manager(dataset_json)
         allow_compile = True
         allow_compile = allow_compile and ('nnUNet_compile' in os.environ.keys()) and (os.environ['nnUNet_compile'].lower() in ('true', '1', 't'))
-        allow_compile = allow_compile and not isinstance(self.network, OptimizedModule)
+        allow_compile = allow_compile # and not isinstance(self.network, OptimizedModule)
         if isinstance(self.network, DistributedDataParallel):
-            allow_compile = allow_compile and isinstance(self.network.module, OptimizedModule)
+            allow_compile = allow_compile # and isinstance(self.network.module, OptimizedModule)
         if allow_compile:
             print('compiling network')
             self.network = torch.compile(self.network)
@@ -464,10 +464,10 @@ class nnUNetPredictor(object):
                     for params in self.list_of_parameters:
 
                         # messing with state dict names...
-                        if not isinstance(self.network, OptimizedModule):
-                            self.network.load_state_dict(params)
-                        else:
-                            self.network._orig_mod.load_state_dict(params)
+                        #if not isinstance(self.network, OptimizedModule):
+                        self.network.load_state_dict(params)
+                        #else:
+                            #self.network._orig_mod.load_state_dict(params)
 
                         if prediction is None:
                             prediction = self.predict_sliding_window_return_logits(data)
@@ -488,10 +488,10 @@ class nnUNetPredictor(object):
             if prediction is None:
                 for params in self.list_of_parameters:
                     # messing with state dict names...
-                    if not isinstance(self.network, OptimizedModule):
-                        self.network.load_state_dict(params)
-                    else:
-                        self.network._orig_mod.load_state_dict(params)
+                    #if not isinstance(self.network, OptimizedModule):
+                    self.network.load_state_dict(params)
+                    #else:
+                        #self.network._orig_mod.load_state_dict(params)
 
                     if prediction is None:
                         prediction = self.predict_sliding_window_return_logits(data)
