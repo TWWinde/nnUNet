@@ -149,6 +149,7 @@ if __name__ == "__main__":
     #get_2d_images(ct_paths, label_paths)
     #print('data prepare finished')
     # extracted archive from https://www.kaggle.com/datasets/insaff/massachusetts-roads-dataset?resource=download
+    print('start')
     source = '/misc/data/private/autoPET/data_nnunet'
 
     dataset_name = 'Dataset522_body'
