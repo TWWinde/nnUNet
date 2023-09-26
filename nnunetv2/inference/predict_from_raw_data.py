@@ -151,13 +151,13 @@ class nnUNetPredictor(object):
 
     def get_list_images(self, folder):
         list = []
+        list_of_lists = []
         file_list = os.listdir(folder)
-        file_list = [file for file in file_list if file.endswith('png')]
         sorted_file_list = sorted(file_list, key=lambda x: int(re.search(r'\d+', x).group()))
         for item in sorted_file_list:
             list.append(os.path.join(folder, item))
-
-        return list
+        list_of_lists.append(list)
+        return list_of_lists
 
     def _manage_input_and_output_lists(self, list_of_lists_or_source_folder: Union[str, List[List[str]]],
                                        output_folder_or_list_of_truncated_output_files: Union[None, str, List[str]],
