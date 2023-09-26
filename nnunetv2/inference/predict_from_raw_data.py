@@ -6,6 +6,7 @@ from copy import deepcopy
 from time import sleep
 from typing import Tuple, Union, List, Optional
 
+import cv2
 import numpy as np
 import torch
 from acvl_utils.cropping_and_padding.padding import pad_nd_image
@@ -860,11 +861,68 @@ def predict_entry_point():
     #                           num_parts=args.num_parts,
     #                           part_id=args.part_id,
     #                           device=device)
+def get_predicted_label():
+    path_save = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), "segmentartion")
+    path_read = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), "image")
+    predictor = nnUNetPredictor(
+        tile_step_size=0.5,
+        use_gaussian=True,
+        use_mirroring=True,
+        perform_everything_on_gpu=True,
+        device=torch.device('cuda', 0),
+        verbose=False,
+        verbose_preprocessing=False,
+        allow_tqdm=True
+    )
+    predictor.initialize_from_trained_model_folder(
+        join(nnUNet_results, 'Dataset522_body/nnUNetTrainer__nnUNetPlans__2d'),
+        use_folds=(0,),
+        checkpoint_name='checkpoint_final.pth',
+    )
+    predictor.predict_from_files(path_read,
+                                 path_save,
+                                 save_probabilities=False, overwrite=False,
+                                 num_processes_preprocessing=2, num_processes_segmentation_export=2,
+                                 folder_with_segs_from_prev_stage=None, num_parts=1, part_id=0)
 
+
+import os
+
+def compute_iou(pred_mask, gt_mask):
+    intersection = np.logical_and(pred_mask, gt_mask)
+    union = np.logical_or(pred_mask, gt_mask)
+    iou = np.sum(intersection) / np.sum(union)
+    return iou
+
+
+def compute_miou(pred_folder, gt_folder):
+    pred_files = [f for f in sorted(os.listdir(pred_folder)) if f.endswith(".png")]
+    gt_files = [f for f in sorted(os.listdir(pred_folder)) if f.endswith(".png")]
+    num_classes = 37
+    class_ious = np.zeros(num_classes)
+    for class_idx in range(num_classes):
+        ious = []
+        for pred_file, gt_file in zip(pred_files, gt_files):
+            pred_mask = np.array(cv2.imread(os.path.join(pred_folder, pred_file))) == class_idx
+            gt_mask = np.array(cv2.imread(os.path.join(gt_folder, gt_file))) == class_idx
+            iou = compute_iou(pred_mask, gt_mask)
+            ious.append(iou)
+
+        class_ious[class_idx] = np.mean(ious)
+
+    mIoU = np.mean(class_ious)
+
+    return mIoU
 
 if __name__ == '__main__':
     # predict a bunch of files
     from nnunetv2.paths import nnUNet_results, nnUNet_raw
+
+    get_predicted_label()
+    pred_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), 'segmentation')
+    gt_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), 'label')
+    answer = compute_miou(pred_folder, gt_folder)
+    '''''
     predictor = nnUNetPredictor(
         tile_step_size=0.5,
         use_gaussian=True,
@@ -915,4 +973,4 @@ if __name__ == '__main__':
     #                              num_processes_preprocessing=2, num_processes_segmentation_export=2,
     #                              folder_with_segs_from_prev_stage='/media/isensee/data/nnUNet_raw/Dataset003_Liver/imagesTs_predlowres',
     #                              num_parts=1, part_id=0)
-
+'''''
