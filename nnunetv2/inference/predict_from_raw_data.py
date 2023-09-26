@@ -198,7 +198,7 @@ class nnUNetPredictor(object):
             seg_from_prev_stage_files = [seg_from_prev_stage_files[i] for i in not_existing_indices]
             print(f'overwrite was set to {overwrite}, so I am only working on cases that haven\'t been predicted yet. '
                   f'That\'s {len(not_existing_indices)} cases.')
-        print('1',list_of_lists_or_source_folder)
+
         return list_of_lists_or_source_folder, output_filename_truncated, seg_from_prev_stage_files
 
     def predict_from_files(self,
@@ -252,7 +252,7 @@ class nnUNetPredictor(object):
                                                 output_folder_or_list_of_truncated_output_files,
                                                 folder_with_segs_from_prev_stage, overwrite, part_id, num_parts,
                                                 save_probabilities)
-        print('2',list_of_lists_or_source_folder)
+
         if len(list_of_lists_or_source_folder) == 0:
             return
 
