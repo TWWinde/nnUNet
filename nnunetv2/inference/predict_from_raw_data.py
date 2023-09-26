@@ -922,6 +922,7 @@ if __name__ == '__main__':
     pred_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), 'segmentation')
     gt_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(0), 'label')
     answer = compute_miou(pred_folder, gt_folder)
+    print('miou',answer)
     '''''
     predictor = nnUNetPredictor(
         tile_step_size=0.5,
