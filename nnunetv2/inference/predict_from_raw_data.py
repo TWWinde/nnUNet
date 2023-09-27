@@ -171,7 +171,7 @@ class nnUNetPredictor(object):
                                                                                        self.dataset_json['file_ending'])
             #list_of_lists_or_source_folder = self.get_list_images(list_of_lists_or_source_folder)
         print(f'There are {len(list_of_lists_or_source_folder)} cases in the source folder')
-        list_of_lists_or_source_folder = list_of_lists_or_source_folder[part_id::num_parts]
+        #list_of_lists_or_source_folder = list_of_lists_or_source_folder[part_id::num_parts]
         caseids = [os.path.basename(i[0])[:-(len(self.dataset_json['file_ending']) + 5)] for i in
                    list_of_lists_or_source_folder]
         print(
