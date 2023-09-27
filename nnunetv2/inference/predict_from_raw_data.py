@@ -876,7 +876,7 @@ def predict_entry_point():
     #                           part_id=args.part_id,
     #                           device=device)
 def get_predicted_label():
-    path_save = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(1), "segmentartion")
+    path_save = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(1), "segmentation")
     path_read = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', str(1), "image")
     predictor = nnUNetPredictor(
         tile_step_size=0.5,
