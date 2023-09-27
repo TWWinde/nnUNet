@@ -266,7 +266,7 @@ class DefaultPreprocessor(object):
 
 def example_test_case_preprocessing():
     # (paths to files may need adaptations)
-    plans_file = '/home/isensee/drives/gpu_data/nnUNet_preprocessed/Dataset219_AMOS2022_postChallenge_task2/nnUNetPlans.json'
+    plans_file = '/no_backups/s1449/Medical-Images_Synthesis/results/medicals/segmentation/plans.json'
     dataset_json_file = '/home/isensee/drives/gpu_data/nnUNet_preprocessed/Dataset219_AMOS2022_postChallenge_task2/dataset.json'
     input_images = ['/home/isensee/drives/e132-rohdaten/nnUNetv2/Dataset219_AMOS2022_postChallenge_task2/imagesTr/amos_0600_0000.nii.gz', ]  # if you only have one channel, you still need a list: ['case000_0000.nii.gz']
 
