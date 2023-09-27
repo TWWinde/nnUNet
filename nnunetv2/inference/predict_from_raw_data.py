@@ -171,7 +171,7 @@ class nnUNetPredictor(object):
                                                                                        self.dataset_json['file_ending'])
             #list_of_lists_or_source_folder = self.get_list_images(list_of_lists_or_source_folder)
         print(f'There are {len(list_of_lists_or_source_folder)} cases in the source folder')
-        #list_of_lists_or_source_folder = list_of_lists_or_source_folder[part_id::num_parts]
+        list_of_lists_or_source_folder = list_of_lists_or_source_folder[part_id::num_parts]
         caseids = [os.path.basename(i[0])[:-(len(self.dataset_json['file_ending']) + 5)] for i in
                    list_of_lists_or_source_folder]
         print(
@@ -246,7 +246,7 @@ class nnUNetPredictor(object):
                 f'stage ({self.configuration_manager.previous_stage_name}) as input. Please provide the folder where' \
                 f' they are located via folder_with_segs_from_prev_stage'
 
-        # sort out input and output filenames
+        # sort out input and output filenames #####运行到这里了ä
         list_of_lists_or_source_folder, output_filename_truncated, seg_from_prev_stage_files = \
             self._manage_input_and_output_lists(list_of_lists_or_source_folder,
                                                 output_folder_or_list_of_truncated_output_files,
@@ -896,7 +896,7 @@ def get_predicted_label():
     predictor.predict_from_files(path_read,
                                  path_save,
                                  save_probabilities=False, overwrite=False,
-                                 num_processes_preprocessing=2, num_processes_segmentation_export=2,
+                                 num_processes_preprocessing=1, num_processes_segmentation_export=1,
                                  folder_with_segs_from_prev_stage=None, num_parts=1, part_id=0)
 
 
