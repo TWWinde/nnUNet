@@ -875,9 +875,8 @@ def predict_entry_point():
     #                           num_parts=args.num_parts,
     #                           part_id=args.part_id,
     #                           device=device)
-def get_predicted_label():
-    path_save = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', "segmentation")
-    path_read = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', "generated")
+def get_predicted_label(path_read, path_save):
+
     predictor = nnUNetPredictor(
         tile_step_size=0.5,
         use_gaussian=True,
@@ -932,7 +931,10 @@ if __name__ == '__main__':
     # predict a bunch of files
     from nnunetv2.paths import nnUNet_results, nnUNet_raw
 
-    get_predicted_label()
+    path_save = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', "segmentation_real")
+    path_read = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', "groundtruth")
+    os.makedirs(path_save)
+    get_predicted_label(path_read, path_save)
     pred_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', 'segmentation')
     gt_folder = os.path.join('/no_backups/s1449/Medical-Images-Synthesis/results', 'medicals', 'test', 'groundtruth')
     answer = compute_miou(pred_folder, gt_folder)
