@@ -904,27 +904,28 @@ import os
 def compute_iou(pred_mask, gt_mask):
     intersection = np.logical_and(pred_mask, gt_mask)
     union = np.logical_or(pred_mask, gt_mask)
+    if np.sum(union) == 0:
+        return 0.0
     iou = np.sum(intersection) / np.sum(union)
     return iou
 
 
 def compute_miou(pred_folder, gt_folder):
-    pred_files = [f for f in sorted(os.listdir(pred_folder)) if f.endswith(".png")]
-    gt_files = [f for f in sorted(os.listdir(pred_folder)) if f.endswith(".png")]
+    image_name_list = [f for f in sorted(os.listdir(pred_folder)) if f.endswith(".png")]
+
     num_classes = 37
     class_ious = np.zeros(num_classes)
     for class_idx in range(num_classes):
         ious = []
-        for pred_file, gt_file in zip(pred_files, gt_files):
-            pred_mask = np.array(cv2.imread(os.path.join(pred_folder, pred_file))) == class_idx
-            gt_mask = np.array(cv2.imread(os.path.join(gt_folder, gt_file))) == class_idx
+        for image_name in image_name_list:
+            pred_mask = np.array(Image.open(os.path.join(pred_folder, image_name))).astype(np.uint8) == class_idx
+            gt_mask = np.array(Image.open(os.path.join(gt_folder, image_name))).astype(np.uint8) == class_idx
             iou = compute_iou(pred_mask, gt_mask)
             ious.append(iou)
-
-        class_ious[class_idx] = np.mean(ious)
-
+        nonzero_ious = ious[ious != 0]
+        class_ious[class_idx] = np.mean(nonzero_ious)
+        print('Class idx', class_idx, 'ious', np.mean(ious))
     mIoU = np.mean(class_ious)
-
     return mIoU
 
 if __name__ == '__main__':
