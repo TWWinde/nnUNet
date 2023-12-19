@@ -1,8 +1,0 @@
-checkpoints/
-tensorboard_logs/
-jobs/
-**/__pycache__/
-__pycache__/
-util/__pycache__/
-.idea/
-*.out
